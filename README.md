@@ -1,6 +1,6 @@
 # book-lens
 
-1. #### Create "library" database and "books" table
+1. #### Create "library" database
 ```
 CREATE DATABASE library CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 ```
