@@ -35,7 +35,7 @@ CREATE TABLE users (
 ```
 
 
-4 (Optional). #### Add mock data to `books` table
+4. #### (Optional) Add mock data to `books` table
 ```
 USE library;
 
