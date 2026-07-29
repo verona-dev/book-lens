@@ -38,9 +38,9 @@ CREATE TABLE users (
 USE library;
 
 INSERT INTO books (title, author, genre, year) VALUES
-('The Great Gatsby', 'F. Scott Fitzgerald', 'Classic', 1925),
-('To Kill a Mockingbird', 'Harper Lee', 'Fiction', 1960),
-('1984', 'George Orwell', 'Dystopian', 1949),
-('Pride and Prejudice', 'Jane Austen', 'Romance', 1813),
-('The Hobbit', 'J.R.R. Tolkien', 'Fantasy', 1937);
+('The Great Gatsby', 'F. Scott Fitzgerald', 'Classic', 1925, true),
+('To Kill a Mockingbird', 'Harper Lee', 'Fiction', 1960, true),
+('1984', 'George Orwell', 'Dystopian', 1949, true),
+('Pride and Prejudice', 'Jane Austen', 'Romance', 1813, true),
+('The Hobbit', 'J.R.R. Tolkien', 'Fantasy', 1937, true);
 ```
