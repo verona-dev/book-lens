@@ -1,6 +1,6 @@
 # book-lens
 
-1. #### Create "library" database
+1. #### Create `library` database
 ```
 CREATE DATABASE library CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 ```
@@ -19,7 +19,7 @@ CREATE TABLE books (
 );
 ```
 
-3. #### Create "users" table 
+3. #### Create `users` table 
 ```
 CREATE TABLE users ( 
 	id INT AUTO_INCREMENT PRIMARY KEY, 
@@ -33,7 +33,7 @@ CREATE TABLE users (
 ```
 
 
-4. #### Add mock data to books table
+4. #### Add mock data to `books` table
 ```
 USE library;
 
