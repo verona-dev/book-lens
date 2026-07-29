@@ -21,6 +21,8 @@ CREATE TABLE books (
 
 3. #### Create `users` table 
 ```
+USE library;
+
 CREATE TABLE users ( 
 	id INT AUTO_INCREMENT PRIMARY KEY, 
 	username VARCHAR(255) NOT NULL UNIQUE, 
