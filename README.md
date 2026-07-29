@@ -5,7 +5,7 @@
 CREATE DATABASE library CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 ```
 
-2. #### Create "books" table
+2. #### Create `books` table
 ```
 USE library;
 
