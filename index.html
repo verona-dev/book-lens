@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dim">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5/themes.css" rel="stylesheet" type="text/css" />
+    
+    <title>BookLens</title>
+</head>
+
+<body class="flex flex-col items-center">
+<!-- Navbar -->
+<div class="navbar flex justify-between items-center w-full bg-neutral text-neutral-content">
+    <!-- Logo -->
+    <button class="btn btn-ghost font-bold text-xl px-1 mb-0.5 flex items-center px-2">
+        <div class="w-7">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path opacity="0.5" d="M2 9C2 5.22876 2 3.34315 3.17157 2.17157C4.34315 1 6.22876 1 10 1H14C17.7712 1 19.6569 1 20.8284 2.17157C22 3.34315 22 5.22876 22 9V13C22 16.7712 22 18.6569 20.8284 19.8284C19.6569 21 17.7712 21 14 21H10C6.22876 21 4.34315 21 3.17157 19.8284C2 18.6569 2 16.7712 2 13V9Z" fill="#fff"></path> <path d="M6 12.9108V7.49649C6 6.67251 6.66539 6.00074 7.48717 6.06091C7.99967 6.09844 8.55592 6.16228 9 6.27079C9.8239 6.4721 10.851 6.9711 11.4646 7.29318C11.4763 7.29933 11.4881 7.30525 11.5 7.31094V15.7262C11.4975 15.7249 11.495 15.7236 11.4926 15.7223C10.8826 15.4009 9.83655 14.8896 9 14.6852C8.56248 14.5783 8.01608 14.5147 7.50991 14.477C6.67934 14.4151 6 13.7437 6 12.9108Z" fill="#fff"></path> <path d="M12.5 15.7262C12.5025 15.7249 12.505 15.7236 12.5074 15.7223C13.1174 15.4009 14.1634 14.8896 15 14.6852C15.4375 14.5783 15.9839 14.5147 16.4901 14.477C17.3207 14.4151 18 13.7437 18 12.9108V7.45154C18 6.64543 17.3619 5.98216 16.5568 6.0217C15.9405 6.05197 15.2404 6.12099 14.7 6.27079C13.9685 6.47356 13.0752 6.95027 12.5219 7.27042C12.5147 7.27462 12.5073 7.27874 12.5 7.28277V15.7262Z" fill="#fff"></path> </g></svg>
+        </div>
+        <span class="mb-0.5">BookLens</span>
+    </button>
+    
+    <!-- Logout -->
+    <div class="flex items-center gap-8">
+        <h2 class="font-medium ml-8"><span id="role"></span></h2>
+        
+        <button id="logoutBtn" style="display:none" onclick="logout()" class="btn btn-outline btn-error">
+            Logout
+        </button>
+    </div>
+</div>
+
+<main class="flex flex-col items-center justify-center gap-12 p-6 w-full h-full max-w-[1700px] mx-auto">
+    <!-- Login -->
+    <div id="loginCard" class="card bg-neutral w-120 flex flex-col p-6 shadow-lg rounded-2xl">
+        <div class="card-body gap-12">
+            <!-- Login Title  -->
+            <div class="flex justify-center items-center gap-3">
+                <div class="w-10">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M16 6C16 8.20914 14.2091 10 12 10C9.79086 10 8 8.20914 8 6C8 3.79086 9.79086 2 12 2C14.2091 2 16 3.79086 16 6Z" fill="#fff"></path> <path fill-rule="evenodd" clip-rule="evenodd" d="M16.5 22C14.8501 22 14.0251 22 13.5126 21.4874C13 20.9749 13 20.1499 13 18.5C13 16.8501 13 16.0251 13.5126 15.5126C14.0251 15 14.8501 15 16.5 15C18.1499 15 18.9749 15 19.4874 15.5126C20 16.0251 20 16.8501 20 18.5C20 20.1499 20 20.9749 19.4874 21.4874C18.9749 22 18.1499 22 16.5 22ZM18.468 17.7458C18.6958 17.518 18.6958 17.1487 18.468 16.9209C18.2402 16.693 17.8709 16.693 17.6431 16.9209L15.7222 18.8417L15.3569 18.4764C15.1291 18.2486 14.7598 18.2486 14.532 18.4764C14.3042 18.7042 14.3042 19.0736 14.532 19.3014L15.3097 20.0791C15.5375 20.307 15.9069 20.307 16.1347 20.0791L18.468 17.7458Z" fill="#fff"></path> <path opacity="0.5" d="M14.4774 21.9208C13.7513 21.9728 12.9296 22 12 22C4 22 4 19.9853 4 17.5C4 15.0147 7.58172 13 12 13C14.8806 13 17.4056 13.8564 18.8142 15.1412C18.298 15 17.5737 15 16.5 15C14.8501 15 14.0251 15 13.5126 15.5126C13 16.0251 13 16.8501 13 18.5C13 20.1499 13 20.9749 13.5126 21.4874C13.7501 21.725 14.0547 21.8524 14.4774 21.9208Z" fill="#fff"></path> </g></svg>
+                </div>
+                <h2 class="text-4xl font-bold text-center">Login</h2>
+            </div>
+            
+            <!-- Login Inputs  -->
+            <div class="flex flex-col gap-6">
+                <div class="flex flex-col gap-2">
+                    <label class="text-lg">Username</label>
+                    <input type="text" id="username" class="input w-full">
+                </div>
+                
+                <div class="flex flex-col gap-2">
+                    <label class="text-lg">Password</label>
+                    <input type="password" id="password" class="input w-full">
+                </div>
+            </div>
+            
+            <div class="flex flex-col gap-6">
+                <!-- Login Button  -->
+                <button onclick="login()" class="btn btn-info mt-4 ">Login</button>
+                
+                <!-- Admin Login Button  -->
+                <button class="btn btn-link">
+                    <a href="admin-panel.html">Go to Admin Panel</a>
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Books -->
+    <div id="booksSection" style="display:none" class="flex flex-col xl:flex-row gap-8 p-6 w-full">
+        <!-- Add/Edit Book -->
+        <div id="addEditBookForm" class="card bg-neutral xl:w-160 h-150 flex flex-col gap-6 px-4 py-6 shadow-lg rounded-2xl border-info">
+            <div class="card-body justify-between p-4 h-full">
+                <div class="flex items-center gap-3">
+                    <div id="svg-container" class="w-10">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path opacity="0.5" fill-rule="evenodd" clip-rule="evenodd" d="M3.25 22C3.25 21.5858 3.58579 21.25 4 21.25H20C20.4142 21.25 20.75 21.5858 20.75 22C20.75 22.4142 20.4142 22.75 20 22.75H4C3.58579 22.75 3.25 22.4142 3.25 22Z" fill="#fff"></path> <path opacity="0.5" d="M19.0807 7.37162C20.3095 6.14279 20.3095 4.15046 19.0807 2.92162C17.8519 1.69279 15.8595 1.69279 14.6307 2.92162L13.9209 3.63141C13.9306 3.66076 13.9407 3.69052 13.9512 3.72066C14.2113 4.47054 14.7022 5.45356 15.6256 6.37698C16.549 7.30039 17.532 7.79126 18.2819 8.05142C18.3119 8.06183 18.3415 8.07187 18.3708 8.08155L19.0807 7.37162Z" fill="#fff"></path> <path d="M13.9511 3.59961L13.9205 3.63017C13.9303 3.65952 13.9403 3.68928 13.9508 3.71942C14.211 4.4693 14.7018 5.45232 15.6252 6.37574C16.5487 7.29915 17.5317 7.79002 18.2816 8.05018C18.3113 8.0605 18.3407 8.07046 18.3696 8.08005L11.5198 14.9299C11.058 15.3917 10.827 15.6227 10.5724 15.8213C10.2721 16.0555 9.94711 16.2564 9.60326 16.4202C9.31177 16.5591 9.00196 16.6624 8.38235 16.869L5.11497 17.9581C4.81005 18.0597 4.47388 17.9804 4.24661 17.7531C4.01934 17.5258 3.93998 17.1897 4.04162 16.8847L5.13074 13.6173C5.33728 12.9977 5.44055 12.6879 5.57947 12.3964C5.74334 12.0526 5.94418 11.7276 6.17844 11.4273C6.37702 11.1727 6.60794 10.9418 7.06971 10.48L13.9511 3.59961Z" fill="#fff"></path> </g></svg>
+                    </div>
+                    
+                    <h2 class="text-4xl font-bold"><span id="addEditTitle"></span></h2>
+                </div>
+                
+                <div class="flex flex-col gap-2">
+                    <input type="hidden" id="bookIdEdit">
+                    
+                    <div class="flex flex-col gap-2">
+                        <label for="title">Title:</label>
+                        <input type="text" id="title" class="input w-full input-sm" placeholder="Enter book title">
+                    </div>
+                    
+                    <div class="flex flex-col gap-2">
+                        <label for="author">Author:</label>
+                        <input type="text" id="author" class="input w-full input-sm" placeholder="Enter author name">
+                    </div>
+                    
+                    <div class="flex flex-col gap-2">
+                        <label for="genre">Genre:</label>
+                        <input type="text" id="genre" class="input w-full input-sm" placeholder="Enter book genre (e.g., Fiction, Sci-Fi)">
+                    </div>
+                    
+                    <div class="flex flex-col gap-2">
+                        <label for="year">Year:</label>
+                        <input type="number" id="year" class="input w-full input-sm" placeholder="Enter publication year">
+                    </div>
+                    
+                    <div class="flex flex-col gap-2">
+                        <label for="available">Available:</label>
+                        <select id="available" class="select select-sm w-full">
+                            <option value="true">Yes</option>
+                            <option value="false">No</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="flex justify-center items-center gap-2">
+                    <button id="addBookBtn" onclick="addBook()" class="btn btn-info w-full">Add Book</button>
+                    <button id="cancelUpdatesBtn" onclick="cancelEditBook()" style="display: none;" class="btn btn-error flex-1">Cancel Updates</button>
+                    <button id="saveUpdatesBtn" onclick="saveEditBook()" style="display: none;" class="btn btn-success flex-1">Save Updates</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Books Table -->
+        <div class="card bg-neutral w-full gap-6 p-6 shadow-lg rounded-2xl">
+            <div class="card-body gap-12 items-center">
+                <div class="flex items-center gap-3">
+                    <div class='w-10'>
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                            <g id="SVGRepo_iconCarrier">
+                                <path
+                                    opacity="0.5"
+                                    d="M12 20.0283V18H8L8 20.0283C8 20.3054 8 20.444 8.09485 20.5C8.18971 20.556 8.31943 20.494 8.57888 20.3701L9.82112 19.7766C9.9089 19.7347 9.95279 19.7138 10 19.7138C10.0472 19.7138 10.0911 19.7347 10.1789 19.7767L11.4211 20.3701C11.6806 20.494 11.8103 20.556 11.9051 20.5C12 20.444 12 20.3054 12 20.0283Z"
+                                    fill="#fff"
+                                ></path>
+                                <path
+                                    d="M8 18H7.42598C6.34236 18 5.96352 18.0057 5.67321 18.0681C5.15982 18.1785 4.71351 18.4151 4.38811 18.7347C4.27837 18.8425 4.22351 18.8964 4.09696 19.2397C3.97041 19.5831 3.99045 19.7288 4.03053 20.02C4.03761 20.0714 4.04522 20.1216 4.05343 20.1706C4.16271 20.8228 4.36259 21.1682 4.66916 21.4142C4.97573 21.6602 5.40616 21.8206 6.21896 21.9083C7.05566 21.9986 8.1646 22 9.75461 22H14.1854C15.7754 22 16.8844 21.9986 17.7211 21.9083C18.5339 21.8206 18.9643 21.6602 19.2709 21.4142C19.5774 21.1682 19.7773 20.8228 19.8866 20.1706C19.9784 19.6228 19.9965 18.9296 20 18H12V20.0283C12 20.3054 12 20.444 11.9051 20.5C11.8103 20.556 11.6806 20.494 11.4211 20.3701L10.1789 19.7767C10.0911 19.7347 10.0472 19.7138 10 19.7138C9.95279 19.7138 9.9089 19.7347 9.82112 19.7766L8.57888 20.3701C8.31943 20.494 8.18971 20.556 8.09485 20.5C8 20.444 8 20.3054 8 20.0283V18Z"
+                                    fill="#fff"
+                                ></path>
+                                <path
+                                    opacity="0.5"
+                                    d="M4.72718 2.73332C5.03258 2.42535 5.46135 2.22456 6.27103 2.11478C7.10452 2.00177 8.2092 2 9.7931 2H14.2069C15.7908 2 16.8955 2.00177 17.729 2.11478C18.5387 2.22456 18.9674 2.42535 19.2728 2.73332C19.5782 3.0413 19.7773 3.47368 19.8862 4.2902C19.9982 5.13073 20 6.24474 20 7.84202L20 18H7.42598C6.34236 18 5.96352 18.0057 5.67321 18.0681C5.15982 18.1785 4.71351 18.4151 4.38811 18.7347C4.27837 18.8425 4.22351 18.8964 4.09696 19.2397C4.02435 19.4367 4 19.5687 4 19.7003V7.84202C4 6.24474 4.00176 5.13073 4.11382 4.2902C4.22268 3.47368 4.42179 3.0413 4.72718 2.73332Z"
+                                    fill="#fff"
+                                ></path>
+                                <path
+                                    d="M7.25 7C7.25 6.58579 7.58579 6.25 8 6.25H16C16.4142 6.25 16.75 6.58579 16.75 7C16.75 7.41421 16.4142 7.75 16 7.75H8C7.58579 7.75 7.25 7.41421 7.25 7Z"
+                                    fill="#fff"
+                                ></path>
+                                <path
+                                    d="M8 9.75C7.58579 9.75 7.25 10.0858 7.25 10.5C7.25 10.9142 7.58579 11.25 8 11.25H13C13.4142 11.25 13.75 10.9142 13.75 10.5C13.75 10.0858 13.4142 9.75 13 9.75H8Z"
+                                    fill="#fff"
+                                ></path>
+                            </g>
+                        </svg>
+                    </div>
+                    <h2 class="text-4xl font-bold">Book Collection</h2>
+                </div>
+                
+                <span id="loading" class="text-xl">Loading...</span>
+                
+                <div class="overflow-x-auto rounded-box w-full">
+                    <table class="table table-zebra min-h-80">
+                        <thead id="tableHead"></thead>
+                        <tbody id="bookData"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- Status Notification -->
+<div id="toastContainer" class="toast toast-center"></div>
+
+<!-- Delete Modal -->
+<dialog id="my_modal" class="modal">
+    <div class="modal-box border-error border-t-6 flex flex-col gap-4 p-8">
+        <div class="flex flex-col gap-2">
+            <h3 class="text-2xl text-error font-bold">Delete book</h3>
+            <p>This action will permanently delete this book. This cannot be undone.</p>
+        </div>
+        
+        <form method="dialog" class="flex items-center gap-4 p-4 w-full">
+            <button
+                class="btn btn-outline btn-soft flex-1"
+                onclick='document.getElementById("my_modal").close()'
+            >
+                Cancel
+            </button>
+            
+            <button
+                onclick="deleteBook()"
+                class="btn btn-error flex-1"
+            >
+                Delete Book
+            </button>
+        </form>
+    </div>
+</dialog>
+
+</body>
+</html>
+
+<script>
+    const route = "http://localhost:3000/books";
+    const booksRoute = "http://localhost:3000/books";
+    const loginRoute = "http://localhost:3000/login";
+    const logoutRoute = "http://localhost:3000/logout";
+    
+    let booksList = [];
+    
+    const defaultEditSvg = `
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path opacity="0.5" fill-rule="evenodd" clip-rule="evenodd" d="M3.25 22C3.25 21.5858 3.58579 21.25 4 21.25H20C20.4142 21.25 20.75 21.5858 20.75 22C20.75 22.4142 20.4142 22.75 20 22.75H4C3.58579 22.75 3.25 22.4142 3.25 22Z" fill="#fff"></path> <path opacity="0.5" d="M19.0807 7.37162C20.3095 6.14279 20.3095 4.15046 19.0807 2.92162C17.8519 1.69279 15.8595 1.69279 14.6307 2.92162L13.9209 3.63141C13.9306 3.66076 13.9407 3.69052 13.9512 3.72066C14.2113 4.47054 14.7022 5.45356 15.6256 6.37698C16.549 7.30039 17.532 7.79126 18.2819 8.05142C18.3119 8.06183 18.3415 8.07187 18.3708 8.08155L19.0807 7.37162Z" fill="#fff"></path> <path d="M13.9511 3.59961L13.9205 3.63017C13.9303 3.65952 13.9403 3.68928 13.9508 3.71942C14.211 4.4693 14.7018 5.45232 15.6252 6.37574C16.5487 7.29915 17.5317 7.79002 18.2816 8.05018C18.3113 8.0605 18.3407 8.07046 18.3696 8.08005L11.5198 14.9299C11.058 15.3917 10.827 15.6227 10.5724 15.8213C10.2721 16.0555 9.94711 16.2564 9.60326 16.4202C9.31177 16.5591 9.00196 16.6624 8.38235 16.869L5.11497 17.9581C4.81005 18.0597 4.47388 17.9804 4.24661 17.7531C4.01934 17.5258 3.93998 17.1897 4.04162 16.8847L5.13074 13.6173C5.33728 12.9977 5.44055 12.6879 5.57947 12.3964C5.74334 12.0526 5.94418 11.7276 6.17844 11.4273C6.37702 11.1727 6.60794 10.9418 7.06971 10.48L13.9511 3.59961Z" fill="#fff"></path> </g></svg>
+    `;
+    const activeEditSvg = `
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path opacity="0.5" d="M14.9522 3C13.9146 3 13.0796 3.83502 11.4096 5.50506L6.5 10.4146L13.5854 17.5L18.4949 12.5904C20.165 10.9204 21 10.0854 21 9.04776C21 8.01013 20.165 7.1751 18.4949 5.50506C16.8249 3.83502 15.9899 3 14.9522 3Z" fill="#fff"></path> <path d="M13.5854 17.5001L6.5 10.4147L5.50506 11.4096C3.83502 13.0796 3 13.9147 3 14.9523C3 15.9899 3.83502 16.825 5.50506 18.495C7.1751 20.165 8.01013 21.0001 9.04776 21.0001C10.0854 21.0001 10.9204 20.165 12.5904 18.495L13.5854 17.5001Z" fill="#fff"></path> <g opacity="0.5"> <path d="M9.03264 21H9C9.01086 21.0003 9.02174 20.9999 9.03264 21Z" fill="#fff"></path> <path d="M9.06287 21C9.85928 20.9938 10.5389 20.4938 11.5734 19.5L21 19.5C21.4142 19.5 21.75 19.8358 21.75 20.25C21.75 20.6642 21.4142 21 21 21H9.06287Z" fill="#fff"></path> </g> </g></svg>
+    `;
+    
+    function showAlert(message, type = "info") {
+        const toastContainer = document.getElementById("toastContainer");
+        
+        const alert = document.createElement("div");
+        alert.className = `alert alert-${type}`;
+        alert.innerHTML = `<span>${message}</span>`;
+        
+        toastContainer.appendChild(alert);
+        
+        setTimeout(() => {
+            alert.remove();
+        }, 5000);
+    }
+    
+    function authHeaders() {
+        return {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + sessionStorage.getItem("token")
+        };
+    }
+    
+    function setUI() {
+        document.getElementById("loginCard").style.display = "none";
+        document.getElementById("logoutBtn").style.display = "inline-block";
+        document.getElementById("booksSection").style.display = "flex";
+        document.getElementById("addEditTitle").innerHTML = "Add Book";
+    }
+    
+    async function login() {
+        const username = document.getElementById("username").value;
+        const password = document.getElementById("password").value;
+        
+        try {
+            const response = await fetch(loginRoute, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    username,
+                    password
+                })
+            });
+            
+            if (!response.ok) {
+                throw new Error();
+            }
+            
+            const data = await response.json();
+            
+            sessionStorage.setItem("token", data.token);
+            sessionStorage.setItem("user", JSON.stringify(data.user));
+            
+            setUI();
+            
+            showAlert("Logged in successfully.", "success");
+            
+            listBooks();
+            
+            checkRole();
+        }
+        catch {
+            showAlert("Invalid username or password.", "error");
+        }
+    }
+    
+    function checkRole() {
+        const user = JSON.parse(sessionStorage.getItem("user"));
+        const isAdmin = user && user.role === "admin";
+        const isUser = user && user.role === "user";
+        const role = document.getElementById("role");
+        const form = document.getElementById("addEditBookForm");
+        
+        if (isAdmin) {
+            form.style.display = "block";
+        } else {
+            form.style.display = "none";
+        }
+        
+        document.getElementById("role").innerHTML = user ? `Welcome ${user.username}` : "";
+        
+        return user ? user.role : null;
+    }
+    
+    function resetUI() {
+        document.getElementById("loginCard").style.display = "block";
+        document.getElementById("logoutBtn").style.display = "none";
+        document.getElementById("booksSection").style.display = "none";
+        document.getElementById("bookData").innerHTML = "";
+        document.getElementById("role").innerHTML = "";
+    }
+    
+    async function logout() {
+        try {
+            const result = await fetch(logoutRoute, {
+                method: "POST",
+                headers: authHeaders()
+            });
+            
+            if(result) {
+                sessionStorage.clear();
+                
+                resetUI();
+                
+                showAlert('Logged out successfully.', 'success');
+            };
+        } catch(error) {
+            console.error(error);
+        }
+    }
+    
+    async function listBooks() {
+        const tableHead = document.getElementById("tableHead");
+        const bookData = document.getElementById("bookData");
+        
+        try {
+            const response = await fetch(booksRoute, {
+                headers: authHeaders()
+            });
+            
+            if (!response.ok) {
+                throw new Error("Error fetching books.");
+            }
+            
+            const books = await response.json();
+            booksList = books;
+            bookData.innerHTML = "";
+            
+            const userRole = checkRole();
+            const isAdmin = userRole === "admin";
+            
+            tableHead.innerHTML =  `
+                <tr>
+                    <th>ID</th>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>Genre</th>
+                    <th>Year</th>
+                    <th>Available</th>
+                    ${ isAdmin ? `<th class='text-center'>Action</th>` : "" }
+                </tr>
+            `;
+            
+            for (let i = 0; i < books.length; i++) {
+                const book = books[i];
+                
+                bookData.innerHTML += `
+                    <tr class="hover:bg-base-300">
+                        <td>
+                            <span class="badge badge-soft badge-sm badge-info">${book.id}</span>
+                        </td>
+                        <td>${book.title}</td>
+                        <td>${book.author}</td>
+                        <td>${book.genre}</td>
+                        <td>${book.year}</td>
+                        <td class="text-center w-8">
+                            ${book.available ? `
+                                <span class="w-8 inline-block">
+                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#03a800"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path opacity="0.5" d="M12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2C16.714 2 19.0711 2 20.5355 3.46447C22 4.92893 22 7.28595 22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22Z" fill="#1C274C"></path> <path d="M16.0303 8.96967C16.3232 9.26256 16.3232 9.73744 16.0303 10.0303L11.0303 15.0303C10.7374 15.3232 10.2626 15.3232 9.96967 15.0303L7.96967 13.0303C7.67678 12.7374 7.67678 12.2626 7.96967 11.9697C8.26256 11.6768 8.73744 11.6768 9.03033 11.9697L10.5 13.4393L14.9697 8.96967C15.2626 8.67678 15.7374 8.67678 16.0303 8.96967Z" fill="#1C274C"></path> </g></svg>
+                                </span>
+                            ` : `
+                                <span class="w-8 inline-block">
+                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#bf4040"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path opacity="0.5" d="M3 10.4167C3 7.21907 3 5.62028 3.37752 5.08241C3.75503 4.54454 5.25832 4.02996 8.26491 3.00079L8.83772 2.80472C10.405 2.26824 11.1886 2 12 2C12.8114 2 13.595 2.26824 15.1623 2.80472L15.7351 3.00079C18.7417 4.02996 20.245 4.54454 20.6225 5.08241C21 5.62028 21 7.21907 21 10.4167V11.9914C21 17.6294 16.761 20.3655 14.1014 21.5273C13.38 21.8424 13.0193 22 12 22C10.9807 22 10.62 21.8424 9.89856 21.5273C7.23896 20.3655 3 17.6294 3 11.9914V10.4167Z" fill="#1C274C"></path> <path d="M10.0303 8.96967C9.73744 8.67678 9.26256 8.67678 8.96967 8.96967C8.67678 9.26256 8.67678 9.73744 8.96967 10.0303L10.9394 12L8.96969 13.9697C8.6768 14.2626 8.6768 14.7374 8.96969 15.0303C9.26258 15.3232 9.73746 15.3232 10.0304 15.0303L12 13.0607L13.9696 15.0303C14.2625 15.3232 14.7374 15.3232 15.0303 15.0303C15.3232 14.7374 15.3232 14.2625 15.0303 13.9696L13.0607 12L15.0303 10.0303C15.3232 9.73746 15.3232 9.26258 15.0303 8.96969C14.7374 8.6768 14.2626 8.6768 13.9697 8.96969L12 10.9394L10.0303 8.96967Z" fill="#1C274C"></path> </g></svg>
+                                </span>
+                            `}
+                        </td>
+                        
+                        ${isAdmin ? `
+                             <td class="flex justify-center items-center gap-4">
+                                 <button onclick="editBook(${book.id})" class="action-btn btn btn-soft btn-warning btn-sm">
+                                    <div class='w-4'>
+                                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g id="style=linear"> <g id="edit"> <path id="vector" d="M18.4101 3.6512L20.5315 5.77252C21.4101 6.6512 21.4101 8.07582 20.5315 8.9545L9.54019 19.9458C9.17774 20.3082 8.70239 20.536 8.19281 20.5915L4.57509 20.9856C3.78097 21.072 3.11061 20.4017 3.1971 19.6076L3.59111 15.9898C3.64661 15.4803 3.87444 15.0049 4.23689 14.6425L3.70656 14.1121L4.23689 14.6425L15.2282 3.6512C16.1068 2.77252 17.5315 2.77252 18.4101 3.6512Z" stroke="#fff" stroke-width="1.5"></path> <path id="vector_2" d="M15.2282 3.6512C16.1068 2.77252 17.5315 2.77252 18.4101 3.6512L20.5315 5.77252C21.4101 6.6512 21.4101 8.07582 20.5315 8.9545L18.7283 10.7576L13.425 5.45432L15.2282 3.6512Z" stroke="#fff" stroke-width="1.5"></path> </g> </g> </g></svg>
+                                    </div>
+                                 </button>
+                                 
+                                 <button onclick="confirmDeleteBook(${book.id})" class="action-btn btn btn-soft btn-error btn-sm">
+                                    <div class='w-4'>
+                                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g id="style=linear"> <g id="close"> <path id="vector" d="M6.75024 6.74512L17.2551 17.25" stroke="#fff" stroke-width="1.5" stroke-linecap="round"></path> <path id="vector_2" d="M17.255 6.74512L6.75006 17.2499" stroke="#fff" stroke-width="1.5" stroke-linecap="round"></path> </g> </g> </g></svg>
+                                    </div>
+                                 </button>
+                              </td>
+                        ` : ""}
+                    </tr>
+                `;
+            }
+            
+            document.getElementById("loading").style.display = "none";
+            
+            // showAlert("Table updated.", "success");
+        } catch (error) {
+            showAlert("Error: Unable to load data.", "error");
+            console.log(error);
+        }
+    }
+    
+    async function addBook() {
+        const title = document.getElementById("title").value;
+        const author = document.getElementById("author").value;
+        const genre = document.getElementById("genre").value;
+        const year = document.getElementById("year").value;
+        const available = document.getElementById("available").value;
+        
+        if (title === "" || author === "" || genre === "" || year === "" || available === null) {
+            return showAlert("Please enter title, author, genre, year, and availability.", "warning");
+        }
+        
+        const newBook = {
+            title: title,
+            author: author,
+            genre: genre,
+            year: Number(year),
+            available,
+        };
+        
+        try {
+            const response = await fetch(booksRoute, {
+                method: "POST",
+                headers: authHeaders(),
+                body: JSON.stringify(newBook)
+            });
+            
+            if (!response.ok) {
+                throw new Error("Error adding book.");
+            }
+            
+            const addedBook = await response.json();
+            console.log("Added book:", addedBook);
+            
+            document.getElementById("title").value = "";
+            document.getElementById("author").value = "";
+            document.getElementById("genre").value = "";
+            document.getElementById("year").value = "";
+            
+            showAlert("Book added successfully.", "success");
+            
+            await listBooks();
+        } catch (error) {
+            showAlert("Error: Unable to add book.", "error");
+            console.log(error);
+        }
+    }
+    
+    function editBook(bookId) {
+        const actionButtons = document.querySelectorAll(".action-btn");
+        actionButtons.forEach(button => {
+            button.disabled = true;
+            button.style.opacity = "0.5";
+        });
+        
+        document.getElementById("addEditBookForm").classList.add("border");
+        document.getElementById("svg-container").innerHTML = activeEditSvg;
+        document.getElementById("addEditTitle").innerHTML = "Edit Book";
+        document.getElementById("saveUpdatesBtn").style.display = "inline-block";
+        document.getElementById("addBookBtn").style.display = "none";
+        document.getElementById("cancelUpdatesBtn").style.display = "inline-block";
+        
+        const book = booksList.find(function(element) { return element.id === bookId; });
+        document.getElementById("bookIdEdit").value = book.id;
+        
+        document.getElementById("title").value = book.title;
+        document.getElementById("author").value = book.author;
+        document.getElementById("genre").value = book.genre;
+        document.getElementById("year").value = book.year;
+        document.getElementById("available").value = book.available ? "true" : "false";
+        console.log(book.available);
+        
+        showAlert("Editing book...", "warning");
+    }
+    
+    function resetEditUI() {
+        document.getElementById("bookIdEdit").value = "";
+        document.getElementById("title").value = "";
+        document.getElementById("author").value = "";
+        document.getElementById("genre").value = "";
+        document.getElementById("year").value = "";
+        
+        document.getElementById("addBookBtn").style.display = "inline-block";
+        document.getElementById("saveUpdatesBtn").style.display = "none";
+        document.getElementById("cancelUpdatesBtn").style.display = "none";
+        document.getElementById("addEditTitle").innerHTML = "Add Book";
+        document.getElementById("svg-container").innerHTML = defaultEditSvg;
+        document.getElementById("addEditBookForm").classList.remove("border");
+    }
+    
+    async function saveEditBook() {
+        const actionButtons = document.querySelectorAll(".action-btn");
+        actionButtons.forEach(button => {
+            button.disabled = false;
+            button.style.opacity = "1";
+        });
+        
+        const bookId = document.getElementById("bookIdEdit").value;
+        // document.getElementById("addBookBtn").style.display = "none";
+        const title = document.getElementById("title").value;
+        const author = document.getElementById("author").value;
+        const genre = document.getElementById("genre").value;
+        const year = document.getElementById("year").value;
+        const available = document.getElementById("available").value === "true";
+        
+        if (bookId === "") {
+            return showAlert("No book selected for editing.", "warning");
+        }
+        
+        if (title === "" || author === "" || genre === "" || year === "" || available === null) {
+            return showAlert("Please enter title, author, genre, and year.", "warning");
+        }
+        
+        const editedBook = {
+            title,
+            author,
+            genre,
+            year: Number(year),
+            available,
+        };
+        
+        console.log(editedBook);
+        
+        try {
+            const response = await fetch(booksRoute + "/" + bookId, {
+                method: "PUT",
+                headers: authHeaders(),
+                body: JSON.stringify(editedBook)
+            });
+            
+            if (!response.ok) {
+                throw new Error("Error updating book.");
+            }
+            
+            const newBook = await response.json();
+            console.log("Updated book:", newBook);
+            
+            resetEditUI();
+            
+            showAlert("Book updated successfully.", "success");
+            
+            await listBooks();
+        } catch (error) {
+            showAlert("Error: Unable to update book.", "error");
+            console.log(error);
+        }
+    }
+    
+    function cancelEditBook() {
+        const actionButtons = document.querySelectorAll(".action-btn");
+        actionButtons.forEach(button => {
+            button.disabled = false;
+            button.style.opacity = "1";
+        });
+        
+        resetEditUI();
+        
+        showAlert("Book editing cancelled.", "warning");
+    }
+    
+    let bookToDelete = null;
+    
+    function confirmDeleteBook(bookId) {
+        bookToDelete = bookId;
+        document.getElementById("my_modal").showModal();
+    }
+    
+    async function deleteBook() {
+        if (bookToDelete === null) return;
+        
+        try {
+            const response = await fetch(`${booksRoute}/${bookToDelete}`, {
+                method: "DELETE",
+                headers: authHeaders()
+            });
+            
+            if (!response.ok) {
+                throw new Error("Error deleting book.");
+            }
+            
+            document.getElementById("my_modal").close();
+            bookToDelete = null;
+            
+            showAlert("Book deleted successfully.", "success");
+            await listBooks();
+        } catch (err) {
+            showAlert("Error: Unable to delete book.", "error");
+        }
+    }
+    
+    if (sessionStorage.getItem("token")) {
+        setUI();
+        checkRole();
+        listBooks();
+    }
+</script>
+
+<style>
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+    
+    input[type="number"] {
+        -moz-appearance: textfield;
+    }
+    
+    td {
+        height: 60px !important;
+    }
+</style>
